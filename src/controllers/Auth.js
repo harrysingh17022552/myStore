@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import user from "../models/User.js";
 export const Register = async (req, res) => {
   const { firstname, lastname, gender, email, password, mobile } = req.body;
@@ -45,12 +46,18 @@ export const LogIn = async (req, res) => {
           "You have not registered yet, please visit our registration page",
       });
     }
-    console.log(validUser);
     const checkPassword = await bcrypt.compare(password, validUser.password);
     if (!checkPassword) {
       return res.status(401).json({ message: "Incorrect Password" });
     }
-    return res.status(200).json({ message: "Successfully authorized" });
+    const access_token = jwt.sign(
+      { email: validUser.email },
+      process.env.ACCESS_TOKEN_KEY,
+      { expiresIn: "1d" }
+    );
+    return res
+      .status(200)
+      .json({ message: "Successfully authorized", token: access_token });
   } catch (error) {
     console.log("Caught error from Login Controller : ", error);
     return res.status(500).json({ message: "Internal Server Error" });

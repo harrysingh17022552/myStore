@@ -1,6 +1,6 @@
 const PORT = 5000;
 import express from "express";
-import connectDB from "./DBConnection.js";
+import connectDB from "./src/DB/DBConnection.js";
 const app = express();
 connectDB();
 app.listen(PORT, () => {

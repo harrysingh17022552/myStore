@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import user from "../models/User.js";
 export const Register = async (req, res) => {
   const { firstname, lastname, gender, email, password, mobile } = req.body;
-  if ((!firstname, !lastname, !gender, !email, !password, !mobile)) {
+  if (!firstname || !lastname || !gender || !email || !password || !mobile) {
     return res.status(400).json({ message: "Missing Important Fields" });
   }
   try {
@@ -32,4 +32,27 @@ export const Register = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
-export const LogIn = async (req, res) => {};
+export const LogIn = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "Missing important fields" });
+  }
+  try {
+    const validUser = await user.findOne({ email });
+    if (!validUser) {
+      return res.status(404).json({
+        message:
+          "You have not registered yet, please visit our registration page",
+      });
+    }
+    console.log(validUser);
+    const checkPassword = await bcrypt.compare(password, validUser.password);
+    if (!checkPassword) {
+      return res.status(401).json({ message: "Incorrect Password" });
+    }
+    return res.status(200).json({ message: "Successfully authorized" });
+  } catch (error) {
+    console.log("Caught error from Login Controller : ", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

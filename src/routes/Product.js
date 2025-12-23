@@ -13,8 +13,8 @@ const router = express.Router();
 router
   .route("/product/:id")
   .get(Validate, getProduct)
-  .put(Verify, Validate, updateProduct)
-  .delete(Verify, Validate, deleteProduct);
+  .put(Validate, Verify, updateProduct)
+  .delete(Validate, Verify, deleteProduct);
 router.route("/products").get(getAllProducts);
 router.route("/product").post(Verify, addProduct);
 export default router;

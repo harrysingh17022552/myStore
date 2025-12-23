@@ -9,11 +9,11 @@ const Verify = (req, res, next) => {
   const token = header.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_TOKEN_KEY, (err, decoded) => {
     if (err) {
-      console.log(err);
+      console.error(err.message);
       return res.status(400).json({ message: "Not Valid Token" });
     }
-    req.email = decoded.email;
-    res.statusCode(200);
+    req.user = decoded.email;
+    console.log("JWT verified");
     next();
   });
 };

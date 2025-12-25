@@ -18,7 +18,7 @@ const router = express.Router();
 // 3. DELETE method to remove product from the Products collection.
 router
   .route("/product/:id")
-  .get(Validate, Verify, getProduct)
+  .get(Validate, getProduct)
   .put(Validate, Verify, updateProduct)
   .delete(Validate, Verify, deleteProduct);
 

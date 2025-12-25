@@ -20,6 +20,10 @@ app.use("/", Auth);
 app.use("/", Product);
 app.use("/", Cart);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to MyStore Backend Server");
+});
+
 app.listen(PORT, () => {
   console.log(`Your backend server is running on port number ${PORT}`);
 });
